@@ -1,4 +1,4 @@
-namespace server_dotnet
+namespace Server.Api
 {
     public class WeatherForecast
     {
