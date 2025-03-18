@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Api.PostModels;
 using Server.Core.DTOs;
 using Server.Core.Interfaces.Services;
 using Server.Core.Models;
+using Server.Service.Services;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,11 +13,12 @@ namespace Server.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeacherController(ITeacherService teacherService,IMapper mapper) : ControllerBase
+    public class TeacherController(ITeacherService teacherService,IMapper mapper,IS3Service s3Service) : ControllerBase
     {
 
         private readonly ITeacherService _teacherService=teacherService;
         private readonly IMapper _mapper = mapper;
+        private readonly IS3Service _s3Service = s3Service;
 
 
         // GET: api/<TeacherController>
@@ -105,6 +108,28 @@ namespace Server.Api.Controllers
                 return NotFound(); // החזר 404 אם ה-ID לא קיים
             }
             return NoContent(); // החזר 204 אם המחיקה הצליחה
+        }
+        // ⬆️ שלב 1: קבלת URL להעלאת קובץ ל-S3
+        [HttpGet("Upload-url")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetUploadUrl([FromQuery] string fileName, [FromQuery] string contentType)
+        {
+            if(contentType!="pdf"&& contentType != "docx")
+            {
+                return BadRequest("Invalid file type");
+            }
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest("Missing file name");
+            var url = await _s3Service.GeneratePresignedUrlAsync("images/" + fileName, contentType);
+            return Ok(new { url });
+        }
+
+        // ⬇️ שלב 2: קבלת URL להורדת קובץ מה-S3
+        [HttpGet("Download-url/{fileName}")]
+        public async Task<IActionResult> GetDownloadUrl(string fileName)
+        {
+            var url = await _s3Service.GetDownloadUrlAsync(fileName);
+            return Ok(new { downloadUrl = url });
         }
     }
 }
