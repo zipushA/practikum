@@ -44,8 +44,14 @@ namespace Server.Service.Services
         }
         public async Task<bool> DeleteAsync(int id)
         {
-            await _repositoryManager.MatchingData.DeleteAsync(id);
-            await _repositoryManager.SaveAsync();
+            var item = await _repositoryManager.MatchingData.GetByIdAsync(id); // חפש את הפריט
+            if (item == null)
+            {
+                return false; // החזר false אם ה-ID לא קיים
+            }
+
+           await _repositoryManager.MatchingData.DeleteAsync(id); // מחק את הפריט
+            await _repositoryManager.SaveAsync(); // שמור שינויים
             return true;
         }
 

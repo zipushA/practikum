@@ -17,6 +17,7 @@ namespace Server.Core.Models
         public string email { get; set; }
         public string schoolName { get; set; }
         public string citySchool { get; set; }
+        public int MatchingDataId { get; set; }
 
         public MatchingData demand { get; set; }
         public Principal()
@@ -32,7 +33,7 @@ namespace Server.Core.Models
             email = p.email;
             schoolName = p.schoolName;
             citySchool = p.citySchool;
-            demand = p.demand;
+            //demand = p.demand;
 
         }
         public Principal(int id_from_body, Principal p)
@@ -43,7 +44,7 @@ namespace Server.Core.Models
             email = p.email;
             schoolName = p.schoolName;
             citySchool = p.citySchool;
-            demand = p.demand;
+            //demand = p.demand;
         }
 
     }

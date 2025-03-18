@@ -15,6 +15,7 @@ namespace Server.Core.Models
         public string name { get; set; }
         public string email { get; set; }
         public string link { get; set; }
+        public int MatchingDataId { get; set; }
         public MatchingData data { get; set; }
         public Teacher()
         {
@@ -26,14 +27,17 @@ namespace Server.Core.Models
             
             name = t.name;
             email = t.email;
-            data = t.data;
+            link = t.link;
+            MatchingDataId = t.MatchingDataId;
+            //MatchingData = t.MatchingData;
         }
         public Teacher(int id_from_body, Teacher t)
         {
             id = id_from_body;
             name = t.name;
             email = t.email;
-            data = t.data;
+            MatchingDataId = t.MatchingDataId;
+            //MatchingData = t.MatchingData;
         }
 
     }

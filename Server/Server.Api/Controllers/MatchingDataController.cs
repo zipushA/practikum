@@ -17,40 +17,67 @@ namespace Server.Api.Controllers
         private readonly IMapper _mapper = mapper;
         // GET: api/<MatchingDataController>
         [HttpGet]
-        public async Task< IEnumerable<MatchingDataDto>> Get()
+        public async Task<ActionResult<IEnumerable<MatchingDataDto>>> Get()
         {
-            return await _matchingDataService.GetMatchingDataAsync();
+            var result = await _matchingDataService.GetMatchingDataAsync();
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result); // החזר 200 עם הנתונים
         }
-
         // GET api/<MatchingDataController>/5
         [HttpGet("{id}")]
-        public async Task<MatchingDataDto> Get(int id)
+        public async Task<ActionResult<MatchingDataDto>> Get(int id)
         {
-            return await _matchingDataService.GetByIdAsync(id);
+            var result = await _matchingDataService.GetByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound(); // החזר 404 אם לא נמצא
+            }
+            return Ok(result); // החזר 200 עם הנתון
         }
-
         // POST api/<MatchingDataController>
         [HttpPost]
-        public async Task<MatchingDataDto> Post([FromBody]MatchingDataPostModel matchingData)
+        public async Task<ActionResult<MatchingDataDto>> Post([FromBody] MatchingDataPostModel matchingData)
         {
+            if (matchingData == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
             var matchingDataDto = _mapper.Map<MatchingDataDto>(matchingData);
-            return await _matchingDataService.AddAsync(matchingDataDto);
-
+            var createdEntity = await _matchingDataService.AddAsync(matchingDataDto);
+            return CreatedAtAction(nameof(Get), new { id = createdEntity.Id }, createdEntity); // החזר 201
         }
-
         // PUT api/<MatchingDataController>/5
         [HttpPut("{id}")]
-        public async Task<MatchingDataDto> Put(int id, [FromBody]MatchingDataPostModel matchingData)
+        public async Task<ActionResult<MatchingDataDto>> Put(int id, [FromBody] MatchingDataPostModel matchingData)
         {
+            if (matchingData == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
             var matchingDataDto = _mapper.Map<MatchingDataDto>(matchingData);
-            return await _matchingDataService.UpdateAsync(id, matchingDataDto);
+            var updatedEntity = await _matchingDataService.UpdateAsync(id, matchingDataDto);
+            if (updatedEntity == null)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return Ok(updatedEntity); // החזר 200
         }
 
         // DELETE api/<MatchingDataController>/5
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return await _matchingDataService.DeleteAsync(id);
+            var deleted = await _matchingDataService.DeleteAsync(id);
+            if (!deleted)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return NoContent(); // החזר 204 אם המחיקה הצליחה
         }
     }
 }

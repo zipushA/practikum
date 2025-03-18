@@ -20,48 +20,93 @@ namespace Server.Api.Controllers
 
         // GET: api/<PricipalController>
         [HttpGet]
-        public async Task<IEnumerable<PrincipalDto>> Get()
+        
+        public async Task<ActionResult<IEnumerable<PrincipalDto>>> Get()
         {
-            return await _principalService.GetAllAsync();
+            var result = await _principalService.GetAllAsync();
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result); // החזר 200 עם הנתונים
         }
         [HttpGet("Full")]
-        public async Task<IEnumerable<PrincipalDto>> GetFull()
+        public async Task<ActionResult<IEnumerable<PrincipalDto>>> GetFull()
         {
-            return await _principalService.GetPrincipalFullAsync();
+            // return await _principalService.GetPrincipalFullAsync();
+            var result = await _principalService.GetPrincipalFullAsync();
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result); // החזר 200 עם הנתונים
         }
         // GET api/<PricipalController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PrincipalDto>>GetById(int id)
+       
+        public async Task<ActionResult<PrincipalDto>> GetById(int id)
         {
-            return await _principalService.GetByIdAsync(id);
+            var result = await _principalService.GetByIdAsync(id);
+            if (result == null)
+            {
+                return NotFound(); // החזר 404 אם לא נמצא
+            }
+            return Ok(result); // החזר 200 עם הנתון
         }
         [HttpGet("Full/{id}")]
         public async Task<ActionResult<PrincipalDto>> GetByIdFull(int id)
         {
-            return await _principalService.GetByIdDataAsync(id);
+            var result = await _principalService.GetByIdDataAsync(id);
+            if (result == null)
+            {
+                return NotFound(); // החזר 404 אם לא נמצא
+            }
+            return Ok(result);
         }
-
-        // POST api/<PricipalController>
-        [HttpPost]
-        public async Task<PrincipalDto> Post([FromBody]PrincipalPostModel p)
+            // POST api/<PricipalController>
+            [HttpPost]
+        public async Task<ActionResult<PrincipalDto>> Post([FromBody] PrincipalPostModel principalPostModel)
         {
-            var pDto = _mapper.Map<PrincipalDto>(p);
-            return await _principalService.AddAsync(pDto);
+            if (principalPostModel == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
+            var principalDto = _mapper.Map<PrincipalDto>(principalPostModel);
+            var createdEntity = await _principalService.AddAsync(principalDto);
+            return CreatedAtAction(nameof(GetById), new { id = createdEntity.id }, createdEntity); // החזר 201
         }
 
         // PUT api/<PricipalController>/5
         [HttpPut("{id}")]
-        public async Task<PrincipalDto> Put(int id, [FromBody]PrincipalPostModel value)
+       
+        public async Task<ActionResult<PrincipalDto>> Put(int id, [FromBody] PrincipalPostModel principalPostModel)
         {
-            var pDto = _mapper.Map<PrincipalDto>(value);
-            return await _principalService.UpdateAsync(id, pDto);
+            if (principalPostModel == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
+            var principalDto = _mapper.Map<PrincipalDto>(principalPostModel);
+            var updatedEntity = await _principalService.UpdateAsync(id, principalDto);
+            if (updatedEntity == null)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return Ok(updatedEntity); // החזר 200
         }
 
         // DELETE api/<PricipalController>/5
         [HttpDelete("{id}")]
-        public async Task<bool> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return await _principalService.DeleteAsync(id);
+            // return await _principalService.DeleteAsync(id);
+            var deleted = await _principalService.DeleteAsync(id);
+            if (!deleted)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return NoContent();
         }
     }
 }

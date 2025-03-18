@@ -11,8 +11,8 @@ using Server.Data;
 namespace Server.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250310203044_Create_DB")]
-    partial class Create_DB
+    [Migration("20250318184122_second")]
+    partial class second
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,10 +38,6 @@ namespace Server.Data.Migrations
                     b.Property<bool>("IsKeruv")
                         .HasColumnType("bit");
 
-                    b.PrimitiveCollection<string>("Professions")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ResidentialArea")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -62,12 +58,12 @@ namespace Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<int>("MatchingDataId")
+                        .HasColumnType("int");
+
                     b.Property<string>("citySchool")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("demandId")
-                        .HasColumnType("int");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -77,13 +73,17 @@ namespace Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("paswword")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("schoolName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("id");
 
-                    b.HasIndex("demandId");
+                    b.HasIndex("MatchingDataId");
 
                     b.ToTable("Principals");
                 });
@@ -96,10 +96,14 @@ namespace Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("dataId")
+                    b.Property<int>("MatchingDataId")
                         .HasColumnType("int");
 
                     b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("link")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -109,7 +113,7 @@ namespace Server.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("dataId");
+                    b.HasIndex("MatchingDataId");
 
                     b.ToTable("Teachers");
                 });
@@ -118,7 +122,7 @@ namespace Server.Data.Migrations
                 {
                     b.HasOne("MatchingAPI.Core.Models.MatchingData", "demand")
                         .WithMany()
-                        .HasForeignKey("demandId")
+                        .HasForeignKey("MatchingDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -129,7 +133,7 @@ namespace Server.Data.Migrations
                 {
                     b.HasOne("MatchingAPI.Core.Models.MatchingData", "data")
                         .WithMany()
-                        .HasForeignKey("dataId")
+                        .HasForeignKey("MatchingDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

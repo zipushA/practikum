@@ -9,7 +9,8 @@ namespace Server.Api.PostModels
         public string email { get; set; }
         public string schoolName { get; set; }
         public string citySchool { get; set; }
+        public int MatchingDataId { get; set; }
 
-        public MatchingData demand { get; set; }
+        //public MatchingDataPostModel demand { get; set; }
     }
 }

@@ -55,12 +55,12 @@ namespace Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
+                    b.Property<int>("MatchingDataId")
+                        .HasColumnType("int");
+
                     b.Property<string>("citySchool")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("demandId")
-                        .HasColumnType("int");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -80,7 +80,7 @@ namespace Server.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("demandId");
+                    b.HasIndex("MatchingDataId");
 
                     b.ToTable("Principals");
                 });
@@ -93,7 +93,7 @@ namespace Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
-                    b.Property<int>("dataId")
+                    b.Property<int>("MatchingDataId")
                         .HasColumnType("int");
 
                     b.Property<string>("email")
@@ -110,7 +110,7 @@ namespace Server.Data.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("dataId");
+                    b.HasIndex("MatchingDataId");
 
                     b.ToTable("Teachers");
                 });
@@ -119,7 +119,7 @@ namespace Server.Data.Migrations
                 {
                     b.HasOne("MatchingAPI.Core.Models.MatchingData", "demand")
                         .WithMany()
-                        .HasForeignKey("demandId")
+                        .HasForeignKey("MatchingDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -130,7 +130,7 @@ namespace Server.Data.Migrations
                 {
                     b.HasOne("MatchingAPI.Core.Models.MatchingData", "data")
                         .WithMany()
-                        .HasForeignKey("dataId")
+                        .HasForeignKey("MatchingDataId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -5,7 +5,7 @@
 namespace Server.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Create_DB : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,8 +19,7 @@ namespace Server.Data.Migrations
                     Seniority = table.Column<int>(type: "int", nullable: false),
                     IsBoys = table.Column<bool>(type: "bit", nullable: false),
                     IsKeruv = table.Column<bool>(type: "bit", nullable: false),
-                    ResidentialArea = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Professions = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ResidentialArea = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -34,6 +33,7 @@ namespace Server.Data.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    paswword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     schoolName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     citySchool = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -58,6 +58,7 @@ namespace Server.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    link = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     dataId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

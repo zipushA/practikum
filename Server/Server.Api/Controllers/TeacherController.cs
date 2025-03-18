@@ -20,48 +20,91 @@ namespace Server.Api.Controllers
 
         // GET: api/<TeacherController>
         [HttpGet]
-        public Task<IEnumerable<TeacherDto>> Get()
+        public async Task<ActionResult<IEnumerable<TeacherDto>>> Get()
         {
-            return _teacherService.GetAllAsync();
+            var result = await _teacherService.GetAllAsync();
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result); // החזר 200 עם הנתונים
         }
+
         [HttpGet("Full")]
-        public Task<IEnumerable<TeacherDto>> GetFull()
+        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetFull()
         {
-            return _teacherService.GetTeachersDataAsync();
+          
+            var result = await _teacherService.GetTeachersDataAsync();
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result); // החזר 200 עם הנתונים
         }
         [HttpGet("OrderData")]
-        public Task<IEnumerable<TeacherDto>> GetOrderData(int id)
+        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetOrderData(int id)
         {
-            return _teacherService.GetOrderDataAsync(id);
+            var result = await _teacherService.GetOrderDataAsync(id);
+            if (result == null || !result.Any())
+            {
+                return NotFound(); // אם אין נתונים, החזר 404
+            }
+            return Ok(result);
         }
         // GET  api/<TeacherController>/5
         [HttpGet("Full/{id}")]
-        public Task<TeacherDto?> GetByIdFull(int id)
+        public async Task<ActionResult<TeacherDto?>> GetByIdFull(int id)
         {
-            return _teacherService.GetByIdDataAsync(id);
+            var result = await _teacherService.GetByIdDataAsync(id);
+            if (result == null)
+            {
+                return NotFound(); // החזר 404 אם לא נמצא
+            }
+            return Ok(result); // החזר 200 עם הנתון
         }
 
         // POST api/<TeacherController>
         [HttpPost]
-        public Task<TeacherDto> Post([FromBody]TeacherPostModel t)
+        public async Task<ActionResult<TeacherDto>>Post([FromBody]TeacherPostModel teacherPostModel)
         {
-            var tDto = _mapper.Map<TeacherDto>(t);
-            return _teacherService.AddAsync(tDto);
+            if (teacherPostModel == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
+            var teacherDto = _mapper.Map<TeacherDto>(teacherPostModel);
+            var createdEntity = await _teacherService.AddAsync(teacherDto);
+            return CreatedAtAction(nameof(GetByIdFull), new { id = createdEntity.id }, createdEntity);
         }
 
         // PUT api/<TeacherController>/5
         [HttpPut("{id}")]
-        public Task<TeacherDto> Put(int id, [FromBody]TeacherPostModel t)
+        public async Task<ActionResult<TeacherDto>> Put(int id, [FromBody] TeacherPostModel teacherPostModel)
         {
-            var tDto = _mapper.Map<TeacherDto>(t);
-            return _teacherService.UpdateAsync(id, tDto);
+            if (teacherPostModel == null)
+            {
+                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+            }
+
+            var teacherDto = _mapper.Map<TeacherDto>(teacherPostModel);
+            var updatedEntity = await _teacherService.UpdateAsync(id, teacherDto);
+            if (updatedEntity == null)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return Ok(updatedEntity); // החזר 200
         }
 
         // DELETE api/<TeacherController>/5
         [HttpDelete("{id}")]
-        public Task< bool> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return _teacherService.DeleteAsync(id);
+            var deleted = await _teacherService.DeleteAsync(id);
+            if (!deleted)
+            {
+                return NotFound(); // החזר 404 אם ה-ID לא קיים
+            }
+            return NoContent(); // החזר 204 אם המחיקה הצליחה
         }
     }
 }
