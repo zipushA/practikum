@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Server.Data.Repositorys
 {
-    public class PrincipalReposirory:GeneryRepository<Principal>, IPrincipalRepository
+    public class PrincipalRepository:GeneryRepository<Principal>, IPrincipalRepository
     {
         private readonly DbSet<Principal> _dataSet;
-        public PrincipalReposirory(DataContext context) : base(context)
+        public PrincipalRepository(DataContext context) : base(context)
         {
             _dataSet = context.Set<Principal>();
         }
@@ -22,7 +22,7 @@ namespace Server.Data.Repositorys
         } 
         public async Task< Principal?> GetByIdDataAsync(int id)
         {
-            return await _dataSet.Where(t => t.id == id)
+            return await _dataSet.Where(t => t.Id == id)
                  .Include(t => t.demand).FirstOrDefaultAsync();
         }
     }

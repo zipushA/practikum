@@ -1,4 +1,5 @@
 ﻿using MatchingAPI.Core.Models;
+using Server.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,12 +12,10 @@ namespace Server.Core.Models
    public class Principal
     {
         [Key]
-        public int id { get; set; }    
-        public string name { get; set; }
-        public string paswword { get; set; }
-        public string email { get; set; }
-        public string schoolName { get; set; }
-        public string citySchool { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
         public int MatchingDataId { get; set; }
 
         public MatchingData demand { get; set; }
@@ -28,22 +27,18 @@ namespace Server.Core.Models
         public Principal(Principal p)
         {
             
-            name = p.name;
-            paswword = p.paswword;
-            email = p.email;
-            schoolName = p.schoolName;
-            citySchool = p.citySchool;
+            Name = p.Name;
+            Password = p.Password;
+            Email = p.Email;
             //demand = p.demand;
 
         }
         public Principal(int id_from_body, Principal p)
         {
-            id = id_from_body;
-            name = p.name;
-            paswword = p.paswword;
-            email = p.email;
-            schoolName = p.schoolName;
-            citySchool = p.citySchool;
+            Id = id_from_body;
+            Name = p.Name;
+            Password = p.Password;
+            Email = p.Email;
             //demand = p.demand;
         }
 

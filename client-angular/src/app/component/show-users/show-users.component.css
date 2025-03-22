@@ -1,0 +1,16 @@
+.user-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* מרכז את התוכן */
+    margin-top: 20px; /* מרווח עליון */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* מרכז את הכפתורים */
+    margin-bottom: 20px; /* מרווח תחתון */
+}
+
+h2 {
+    text-align: center; /* מרכז את הכיתוב */
+}

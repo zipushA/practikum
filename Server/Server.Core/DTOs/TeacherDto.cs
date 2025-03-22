@@ -11,11 +11,11 @@ namespace Server.Core.DTOs
     public class TeacherDto
     {
         [Key]
-        public int id { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
-        public string link { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Link { get; set; }
         public int MatchingDataId { get; set; }
-        public MatchingData data { get; set; }
+        public MatchingData Data { get; set; }
     }
 }

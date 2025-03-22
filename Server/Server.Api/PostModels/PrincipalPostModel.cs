@@ -4,11 +4,9 @@ namespace Server.Api.PostModels
 {
     public class PrincipalPostModel
     {
-        public string name { get; set; }
-        public string paswword { get; set; }
-        public string email { get; set; }
-        public string schoolName { get; set; }
-        public string citySchool { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
         public int MatchingDataId { get; set; }
 
         //public MatchingDataPostModel demand { get; set; }

@@ -74,7 +74,7 @@ namespace Server.Api.Controllers
 
             var principalDto = _mapper.Map<PrincipalDto>(principalPostModel);
             var createdEntity = await _principalService.AddAsync(principalDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdEntity.id }, createdEntity); // החזר 201
+            return CreatedAtAction(nameof(GetById), new { id = createdEntity.Id }, createdEntity); // החזר 201
         }
 
         // PUT api/<PricipalController>/5

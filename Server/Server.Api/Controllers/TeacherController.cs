@@ -77,7 +77,7 @@ namespace Server.Api.Controllers
 
             var teacherDto = _mapper.Map<TeacherDto>(teacherPostModel);
             var createdEntity = await _teacherService.AddAsync(teacherDto);
-            return CreatedAtAction(nameof(GetByIdFull), new { id = createdEntity.id }, createdEntity);
+            return CreatedAtAction(nameof(GetByIdFull), new { id = createdEntity.Id }, createdEntity);
         }
 
         // PUT api/<TeacherController>/5
@@ -120,7 +120,7 @@ namespace Server.Api.Controllers
             }
             if (string.IsNullOrEmpty(fileName))
                 return BadRequest("Missing file name");
-            var url = await _s3Service.GeneratePresignedUrlAsync("images/" + fileName, contentType);
+            var url = await _s3Service.GeneratePresignedUrlAsync("resume/" + fileName, contentType);
             return Ok(new { url });
         }
 

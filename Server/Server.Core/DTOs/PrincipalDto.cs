@@ -11,14 +11,11 @@ namespace Server.Core.DTOs
     public class PrincipalDto
     {
         [Key]
-        public int id { get; set; }
-        public string name { get; set; }
-        public string paswword { get; set; }
-        public string email { get; set; }
-        public string schoolName { get; set; }
-        public string citySchool { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
         public int MatchingDataId { get; set; }
 
-       public MatchingData demand { get; set; }
+       public MatchingData Demand { get; set; }
     }
 }

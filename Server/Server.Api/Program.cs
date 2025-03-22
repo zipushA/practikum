@@ -1,3 +1,4 @@
+﻿using DotNetEnv;
 using Microsoft.OpenApi.Models;
 using Server.Api;
 using Server.Core;
@@ -26,7 +27,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
-builder.Services.AddScoped<IPrincipalRepository,PrincipalReposirory>();
+builder.Services.AddScoped<IPrincipalRepository,PrincipalRepository>();
 builder.Services.AddScoped<IPrincipalService, PrincipalService>();
 builder.Services.AddScoped<IMatchingDataRepository, MatchingDataRepository>();
 builder.Services.AddScoped<IMatchingDataService, MatchingDataService>();
@@ -34,10 +35,18 @@ builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped(typeof(IGeneryRepository<>), typeof(GeneryRepository<>));
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddAutoMapper(typeof(MappingPostProfile));
-
+builder.Services.AddScoped<IS3Service, S3Service>();
 builder.Services.AddDbContext<DataContext>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+Env.Load();
+// îåñéó àú äîùúðéí ì-AppSettings áöåøä ãéðàîéú
+builder.Configuration["AWS:BucketName"] = Env.GetString("AWS_BUCKET_NAME");
+builder.Configuration["AWS:Region"] = Env.GetString("AWS_REGION");
+builder.Configuration["AWS:AccessKey"] = Env.GetString("AWS_ACCESS_KEY");
+builder.Configuration["AWS:SecretKey"] = Env.GetString("AWS_SECRET_KEY");
+
+
 
 var app = builder.Build();
 
@@ -55,12 +64,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 app.UseCors("AllowAll");
+
 app.MapControllers();
+
 app.UseSwagger();
+
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-    c.RoutePrefix = string.Empty; // ��� ��-Swagger UI ����� �-root URL
+    c.RoutePrefix = string.Empty; // כדי שה-Swagger UI יופיע ב-root URL
 });
 app.Run();
