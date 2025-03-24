@@ -1,49 +1,4 @@
-<!-- <div>
-    <button (click)="GetTeacher()">הצג מורות</button>
-    
-   @if(teachers.length > 0){
-      <h2>רשימת מורות:</h2>
-      <ul>
-        @for(teacher of teachers;track teacher.name){
-          {{ teacher.name }}   הנח שהאובייקט teacher מכיל מאפיין בשם name -->
-    <!-- }
-      </ul>
-    }
-    <button (click)="GetPrincipal()">הצג מנהלות</button>
-    
-    @if(principals.length > 0){
-       <h2>רשימת מנהלות:</h2>
-       <ul>
-         @for(principal of principals;track principal.name){
-           {{ principal.name }}  הנח שהאובייקט teacher מכיל מאפיין בשם name -->
-     <!-- }
-       </ul>
-     }
-  </div> -->
-  <!-- <div class="user-container">
-    <div>
-    <button mat-raised-button color="primary" (click)="GetTeacher()">הצג מורות</button>
-      <h2>רשימת מורות</h2>
-      <mat-list>
-       
-          @for(teacher of teachers;track teacher.name){
-            <mat-list-item>
-          {{ teacher.name }}
-        </mat-list-item>
-           } הנח שהאובייקט teacher מכיל מאפיין בשם name -->
-        
-      <!-- </mat-list>
-    <button mat-raised-button color="primary" (click)="GetPrincipal()">הצג מנהלות</button>
-      <h2>רשימת מנהלות</h2>
-      <mat-list>
-        @for(principal of principals;track principal.name){
-        <mat-list-item >
-          {{ principal.name }}  הנח שהאובייקט principal מכיל מאפיין בשם name -->
-        <!-- </mat-list-item>
-      }
-      </mat-list>
-  </div>
-   -->
+
    <div class="user-container">
     <div class="button-container">
         <button mat-raised-button color="primary" (click)="GetTeacher()">הצג מורות</button>
@@ -56,6 +11,9 @@
        
           @for(teacher of teachers;track teacher.name){
             <mat-list-item>
+              <span class="icon" (click)="Delete(teacher.id,'Teacher')">
+                <mat-icon color="primary">delete</mat-icon>
+              </span>
           {{ teacher.name }}
         </mat-list-item>
            } 
@@ -69,7 +27,10 @@
         <mat-list>
           @for(principal of principals;track principal.name){
           <mat-list-item >
-            {{ principal.name }} 
+            <span class="icon" (click)="Delete(principal.id,'Pricipal')">
+              <mat-icon color="primary">delete</mat-icon>
+            </span> 
+            {{ principal.name }}      
            </mat-list-item>
         }
         </mat-list>

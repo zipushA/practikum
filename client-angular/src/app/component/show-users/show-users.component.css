@@ -1,16 +1,31 @@
 .user-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* מרכז את התוכן */
-    margin-top: 20px; /* מרווח עליון */
+    align-items: center;
+    margin-top: 20px;
+    background-color: #FFFFFF !important;
 }
 
 .button-container {
     display: flex;
-    justify-content: center; /* מרכז את הכפתורים */
-    margin-bottom: 20px; /* מרווח תחתון */
+    justify-content: center;
+    margin-bottom: 20px;
+    
 }
 
 h2 {
-    text-align: center; /* מרכז את הכיתוב */
+    text-align: center;
+    color: #04BB9C !important;
+}
+
+mat-list-item {
+    color: #04BB9C !important;
+}
+
+.icon mat-icon {
+    color: #04BB9C !important;
+}
+button{
+    color:#FFFFFF !important; 
+    background-color:#04BB9C   !important;
 }

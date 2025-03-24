@@ -114,10 +114,10 @@ namespace Server.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetUploadUrl([FromQuery] string fileName, [FromQuery] string contentType)
         {
-            if(contentType!="pdf"&& contentType != "docx")
-            {
-                return BadRequest("Invalid file type");
-            }
+            //if(contentType!=".pdf"&& contentType != ".docx")
+            //{
+            //    return BadRequest("Invalid file type");
+            //}
             if (string.IsNullOrEmpty(fileName))
                 return BadRequest("Missing file name");
             var url = await _s3Service.GeneratePresignedUrlAsync("resume/" + fileName, contentType);
