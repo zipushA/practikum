@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 
 namespace Server.Data.Repositorys
 {
-   public class RepositoryManager:IRepositoryManager
+   public class RepositoryManager(DataContext context, IUserRepository UserRepository, IMatchingDataRepository matchingDataRepository) : IRepositoryManager
     {
-        private readonly DataContext _context;
-        public ITeacherRepository Teachers { get; }
-        public IPrincipalRepository Principals { get; }
-        public IMatchingDataRepository MatchingData { get; }
+        private readonly DataContext _context = context;
+        public IUserRepository Users { get; } = UserRepository;
+        public IMatchingDataRepository MatchingData { get; } = matchingDataRepository;
 
-        public RepositoryManager(DataContext context, ITeacherRepository teacherRepository, IPrincipalRepository principals,IMatchingDataRepository matchingDataRepository)
-        {
-            _context = context;
-            Teachers = teacherRepository;
-            Principals = principals;
-            MatchingData=matchingDataRepository;
-        }
+        //public RepositoryManager(DataContext context, IUserRepository UserRepository,IMatchingDataRepository matchingDataRepository)
+        //{
+        //    _context = context;
+        //    Teachers = teacherRepository;
+        //    Principals = principals;
+        //    MatchingData=matchingDataRepository;
+        //}
 
         public async Task SaveAsync()
         {

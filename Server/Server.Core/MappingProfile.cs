@@ -14,8 +14,7 @@ namespace Server.Core
     {
         public MappingProfile()
         {
-            CreateMap<Principal,PrincipalDto>().ReverseMap();
-            CreateMap<Teacher, TeacherDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
             CreateMap<MatchingData, MatchingDataDto>().ReverseMap();
         }
     }

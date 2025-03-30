@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.Core.Models
 {
-    public class Teacher
+    public class User
     {
         [Key]
         public int Id { get; set; }
@@ -20,27 +20,11 @@ namespace Server.Core.Models
         public string Link { get; set; }
         public int MatchingDataId { get; set; }
         public MatchingData Data { get; set; }
-        public Teacher()
-        {
-            
-        }
 
-        public Teacher(Teacher t)
+        public List<Role> RoleList { get; set; }
+        public User()
         {
-            
-            Name = t.Name;
-            Email = t.Email;
-            Link = t.Link;
-            MatchingDataId = t.MatchingDataId;
-            //MatchingData = t.MatchingData;
-        }
-        public Teacher(int id_from_body, Teacher t)
-        {
-            Id = id_from_body;
-            Name = t.Name;
-            Email = t.Email;
-            MatchingDataId = t.MatchingDataId;
-            //MatchingData = t.MatchingData;
+            RoleList = new List<Role>();
         }
 
     }

@@ -2,7 +2,7 @@
 
 namespace Server.Api.PostModels
 {
-    public class TeacherPostModel
+    public class UserPostModel
     {
         public string Name { get; set; }
         public string Email { get; set; }

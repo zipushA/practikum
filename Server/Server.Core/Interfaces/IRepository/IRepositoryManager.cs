@@ -8,8 +8,7 @@ namespace Server.Core.Interfaces.IRepository
 {
     public interface IRepositoryManager
     {
-        public ITeacherRepository Teachers { get; }
-        public IPrincipalRepository Principals { get; }
+        public IUserRepository Users { get; }
         public IMatchingDataRepository MatchingData { get; }
         public Task SaveAsync();
     }

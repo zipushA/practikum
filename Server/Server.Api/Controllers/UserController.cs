@@ -13,84 +13,84 @@ namespace Server.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeacherController(ITeacherService teacherService,IMapper mapper,IS3Service s3Service) : ControllerBase
+    public class UserController(IUserService userService,IMapper mapper,IS3Service s3Service) : ControllerBase
     {
 
-        private readonly ITeacherService _teacherService=teacherService;
+        private readonly IUserService _userService= userService;
         private readonly IMapper _mapper = mapper;
         private readonly IS3Service _s3Service = s3Service;
 
 
         // GET: api/<TeacherController>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeacherDto>>> Get()
+        public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
-            var result = await _teacherService.GetAllAsync();
+            var result = await _userService.GetAllAsync();
             if (result == null || !result.Any())
             {
-                return NotFound(); // אם אין נתונים, החזר 404
+                return NotFound();
             }
-            return Ok(result); // החזר 200 עם הנתונים
+            return Ok(result); 
         }
 
         [HttpGet("Full")]
-        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetFull()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetFull([FromBody] string role)
         {
           
-            var result = await _teacherService.GetTeachersDataAsync();
+            var result = await _userService.GetUsersDataAsync(role);
             if (result == null || !result.Any())
             {
-                return NotFound(); // אם אין נתונים, החזר 404
+                return NotFound();
             }
-            return Ok(result); // החזר 200 עם הנתונים
+            return Ok(result);
         }
         [HttpGet("OrderData")]
-        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetOrderData(int id)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetOrderData(int id)
         {
-            var result = await _teacherService.GetOrderDataAsync(id);
+            var result = await _userService.GetOrderDataAsync(id);
             if (result == null || !result.Any())
             {
-                return NotFound(); // אם אין נתונים, החזר 404
+                return NotFound();
             }
             return Ok(result);
         }
         // GET  api/<TeacherController>/5
         [HttpGet("Full/{id}")]
-        public async Task<ActionResult<TeacherDto?>> GetByIdFull(int id)
+        public async Task<ActionResult<UserDto?>> GetByIdFull(int id)
         {
-            var result = await _teacherService.GetByIdDataAsync(id);
+            var result = await _userService.GetByIdDataAsync(id);
             if (result == null)
             {
-                return NotFound(); // החזר 404 אם לא נמצא
+                return NotFound();
             }
-            return Ok(result); // החזר 200 עם הנתון
+            return Ok(result); 
         }
 
         // POST api/<TeacherController>
         [HttpPost]
-        public async Task<ActionResult<TeacherDto>>Post([FromBody]TeacherPostModel teacherPostModel)
+        public async Task<ActionResult<UserDto>>Post([FromBody]UserPostModel teacherPostModel)
         {
             if (teacherPostModel == null)
             {
-                return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
+                return BadRequest("נתונים לא תקינים");
             }
 
-            var teacherDto = _mapper.Map<TeacherDto>(teacherPostModel);
-            var createdEntity = await _teacherService.AddAsync(teacherDto);
-            return CreatedAtAction(nameof(GetByIdFull), new { id = createdEntity.Id }, createdEntity);
+            var teacherDto = _mapper.Map<UserDto>(teacherPostModel);
+            var result = await _userService.AddAsync(teacherDto);
+            return CreatedAtAction(nameof(GetByIdFull), new { id = result.Data.Id }, result.Data);
         }
 
         // PUT api/<TeacherController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<TeacherDto>> Put(int id, [FromBody] TeacherPostModel teacherPostModel)
+        public async Task<ActionResult<UserDto>> Put(int id, [FromBody] UserPostModel teacherPostModel)
         {
             if (teacherPostModel == null)
             {
                 return BadRequest("נתונים לא תקינים"); // החזר 400 אם המודל לא תקין
             }
 
-            var teacherDto = _mapper.Map<TeacherDto>(teacherPostModel);
-            var updatedEntity = await _teacherService.UpdateAsync(id, teacherDto);
+            var teacherDto = _mapper.Map<UserDto>(teacherPostModel);
+            var updatedEntity = await _userService.UpdateAsync(id, teacherDto);
             if (updatedEntity == null)
             {
                 return NotFound(); // החזר 404 אם ה-ID לא קיים
@@ -102,7 +102,7 @@ namespace Server.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var deleted = await _teacherService.DeleteAsync(id);
+            var deleted = await _userService.DeleteAsync(id);
             if (!deleted)
             {
                 return NotFound(); // החזר 404 אם ה-ID לא קיים

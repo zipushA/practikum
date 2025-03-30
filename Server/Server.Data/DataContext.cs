@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MatchingAPI.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using Server.Core.Models;
 
 namespace Server.Data
@@ -6,11 +7,11 @@ namespace Server.Data
     public class DataContext : DbContext
     {
      
-        public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<Principal> Principals { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<MatchingData> MatchingData { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Mathing_DB");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Mathing_db");
         }
     }
 }

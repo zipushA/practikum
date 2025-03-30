@@ -8,8 +8,7 @@ namespace Server.Api
     {
         public MappingPostProfile() 
         { 
-            CreateMap<TeacherPostModel,TeacherDto>();
-            CreateMap<PrincipalPostModel, PrincipalDto>();
+            CreateMap<UserPostModel,UserDto>();
             CreateMap<MatchingDataPostModel, MatchingDataDto>();
         }
     }

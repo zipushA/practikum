@@ -47,7 +47,37 @@ namespace Server.Data.Migrations
                     b.ToTable("MatchingData");
                 });
 
-            modelBuilder.Entity("Server.Core.Models.Principal", b =>
+            modelBuilder.Entity("PermissionRole", b =>
+                {
+                    b.Property<int>("PermissionListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PermissionListId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("PermissionListId", "PermissionListId1");
+
+                    b.HasIndex("PermissionListId1");
+
+                    b.ToTable("PermissionRole");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<int>("RoleListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserListId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleListId", "UserListId");
+
+                    b.HasIndex("UserListId");
+
+                    b.ToTable("RoleUser");
+                });
+
+            modelBuilder.Entity("Server.Core.Models.Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,29 +85,33 @@ namespace Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MatchingDataId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
+                    b.Property<string>("PermissionName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MatchingDataId");
-
-                    b.ToTable("Principals");
+                    b.ToTable("Permission");
                 });
 
-            modelBuilder.Entity("Server.Core.Models.Teacher", b =>
+            modelBuilder.Entity("Server.Core.Models.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Role");
+                });
+
+            modelBuilder.Entity("Server.Core.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,21 +142,40 @@ namespace Server.Data.Migrations
 
                     b.HasIndex("MatchingDataId");
 
-                    b.ToTable("Teachers");
+                    b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Server.Core.Models.Principal", b =>
+            modelBuilder.Entity("PermissionRole", b =>
                 {
-                    b.HasOne("MatchingAPI.Core.Models.MatchingData", "demand")
+                    b.HasOne("Server.Core.Models.Role", null)
                         .WithMany()
-                        .HasForeignKey("MatchingDataId")
+                        .HasForeignKey("PermissionListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("demand");
+                    b.HasOne("Server.Core.Models.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionListId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Server.Core.Models.Teacher", b =>
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("Server.Core.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Server.Core.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Server.Core.Models.User", b =>
                 {
                     b.HasOne("MatchingAPI.Core.Models.MatchingData", "Data")
                         .WithMany()

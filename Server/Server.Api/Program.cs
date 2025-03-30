@@ -1,6 +1,7 @@
 ﻿using DotNetEnv;
 using Microsoft.OpenApi.Models;
 using Server.Api;
+using Server.Api.Extensions;
 using Server.Core;
 using Server.Core.Interfaces.IRepository;
 using Server.Core.Interfaces.Services;
@@ -25,10 +26,9 @@ builder.Services.AddCors(options =>
                           .AllowAnyHeader());
 });
 
-builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
-builder.Services.AddScoped<ITeacherService, TeacherService>();
-builder.Services.AddScoped<IPrincipalRepository,PrincipalRepository>();
-builder.Services.AddScoped<IPrincipalService, PrincipalService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<IMatchingDataRepository, MatchingDataRepository>();
 builder.Services.AddScoped<IMatchingDataService, MatchingDataService>();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -46,7 +46,11 @@ builder.Configuration["AWS:Region"] = Env.GetString("AWS_REGION");
 builder.Configuration["AWS:AccessKey"] = Env.GetString("AWS_ACCESS_KEY");
 builder.Configuration["AWS:SecretKey"] = Env.GetString("AWS_SECRET_KEY");
 
+builder.Services.AddSwagger();
 
+builder.AddJwtAuthentication();
+
+builder.AddJwtAuthorization();
 
 var app = builder.Build();
 
@@ -62,6 +66,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
