@@ -15,7 +15,7 @@ namespace Server.Core.Interfaces.Services
         public Task<IEnumerable<UserDto>> GetOrderDataAsync(int id);
         public Task<IEnumerable<UserDto>> GetAllAsync();
         public Task<UserDto?> GetByIdDataAsync(int id);
-        public Task<Result<UserDto>> AddAsync(UserDto t);
+        public Task<Result<UserDto>> AddAsync(UserDto t,string role);
         public Task<UserDto> UpdateAsync(int id, UserDto t);
         public Task<bool> DeleteAsync(int id);
 

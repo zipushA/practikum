@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
@@ -11,6 +12,7 @@ namespace Server.Core.Models
     {
         public int Id { get; set; }
         public string RoleName { get; set; }
+        [JsonIgnore]
         public List<User> UserList { get; set; }
         public List<Permission> PermissionList { get; set; }
         public Role()

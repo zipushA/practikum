@@ -8,6 +8,7 @@ namespace Server.Data
     {
      
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<MatchingData> MatchingData { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

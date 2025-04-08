@@ -13,6 +13,7 @@ namespace Server.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController(IUserService userService,IMapper mapper,IS3Service s3Service) : ControllerBase
     {
 
@@ -23,6 +24,7 @@ namespace Server.Api.Controllers
 
         // GET: api/<TeacherController>
         [HttpGet]
+        [Authorize(Policy = "admin")]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get()
         {
             var result = await _userService.GetAllAsync();
@@ -34,6 +36,7 @@ namespace Server.Api.Controllers
         }
 
         [HttpGet("Full")]
+        [Authorize(Policy = "admin,principal")]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetFull([FromBody] string role)
         {
           
@@ -67,8 +70,8 @@ namespace Server.Api.Controllers
         }
 
         // POST api/<TeacherController>
-        [HttpPost]
-        public async Task<ActionResult<UserDto>>Post([FromBody]UserPostModel teacherPostModel)
+        [HttpPost("{role}")]
+        public async Task<ActionResult<UserDto>>Post(string role,[FromBody]UserPostModel teacherPostModel)
         {
             if (teacherPostModel == null)
             {
@@ -76,7 +79,7 @@ namespace Server.Api.Controllers
             }
 
             var teacherDto = _mapper.Map<UserDto>(teacherPostModel);
-            var result = await _userService.AddAsync(teacherDto);
+            var result = await _userService.AddAsync(teacherDto,role);
             return CreatedAtAction(nameof(GetByIdFull), new { id = result.Data.Id }, result.Data);
         }
 
@@ -111,7 +114,7 @@ namespace Server.Api.Controllers
         }
         // ⬆️ שלב 1: קבלת URL להעלאת קובץ ל-S3
         [HttpGet("Upload-url")]
-        [AllowAnonymous]
+        [Authorize(Policy = "teacher")]
         public async Task<IActionResult> GetUploadUrl([FromQuery] string fileName, [FromQuery] string contentType)
         {
             //if(contentType!=".pdf"&& contentType != ".docx")
@@ -126,6 +129,7 @@ namespace Server.Api.Controllers
 
         // ⬇️ שלב 2: קבלת URL להורדת קובץ מה-S3
         [HttpGet("Download-url/{fileName}")]
+        [Authorize(Policy = "teacher")]
         public async Task<IActionResult> GetDownloadUrl(string fileName)
         {
             var url = await _s3Service.GetDownloadUrlAsync(fileName);

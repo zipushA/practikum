@@ -25,14 +25,14 @@ namespace Server.Api.Controllers
             return Ok(result.Data);
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult<LoginResponseDto>> Register([FromBody] UserPostModel user)
+        [HttpPost("register/{role}")]
+        public async Task<ActionResult<LoginResponseDto>> Register(string role,[FromBody] UserPostModel user)
         {
-            if (user == null)
+            if (user == null || role==null)
                 return BadRequest("User data is required.");
 
             var userDto = _mapper.Map<UserDto>(user);
-            var result = await _authService.Register(userDto);
+            var result = await _authService.Register(userDto,role);
             if (!result.IsSuccess)
                 return StatusCode(result.StatusCode, result.ErrorMessage);
             return Ok(result.Data);

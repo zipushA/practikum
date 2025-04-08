@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { teacher } from '../../models/teacher';
 import { UsersService } from '../../services/users.service';
-import { principal } from '../../models/principal';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list'; 
 import { MatIconModule } from '@angular/material/icon';
@@ -16,25 +15,14 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './show-users.component.css'
 })
 export class ShowUsersComponent {
-  teachers:teacher[] = [];
-  principals:principal[]=[]
+  users:teacher[] = [];
+
   constructor(private usersService:UsersService){}
- GetTeacher() {
-    this.usersService.getAllTeacher().subscribe(
+ GetUsers() {
+    this.usersService.getAllUser().subscribe(
       (data) => {
     console.log(data)
-        this.teachers = data; // שמירת המידע במערך
-      },
-      (error) => {
-        console.error('Error fetching users', error); // טיפול בשגיאות
-      }
-    );
-  }
-  GetPrincipal(){
-    this.usersService.getAllPrincipal().subscribe(
-      (data) => {
-    console.log(data)
-        this.principals = data; // שמירת המידע במערך
+        this.users = data; // שמירת המידע במערך
       },
       (error) => {
         console.error('Error fetching users', error); // טיפול בשגיאות
@@ -45,13 +33,10 @@ export class ShowUsersComponent {
     this.usersService.delete(id,user).subscribe(
       (response) => {
         console.log('Course deleted successfully', response);
-        if(user==='Teacher'){
-        this.teachers = this.teachers.filter(teacher => teacher.id !== id);
+       
+        this.users = this.users.filter(user => user.id !== id);
         }
-        if(user==='Pricipal'){
-          this.principals = this.principals.filter(principal => principal.id !== id);
-          }
-      },
+      ,
       (error) => {
         console.error('Error fetching users', error); // טיפול בשגיאות
       }

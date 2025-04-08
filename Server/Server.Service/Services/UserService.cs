@@ -6,6 +6,7 @@ using Server.Core.Models;
 using Server.Core.Shared;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,10 +15,11 @@ using System.Threading.Tasks;
 
 namespace Server.Service.Services
 {
-    public class UserService(IRepositoryManager repositoryManager,IMapper mapper): IUserService
+    public class UserService(IRepositoryManager repositoryManager,IMapper mapper,IGeneryRepository<Role> generyRepository): IUserService
     {
         private readonly IRepositoryManager _repositoryManager = repositoryManager;
         private readonly IMapper _mapper = mapper;
+        private readonly IGeneryRepository<Role> _generyRepository = generyRepository;
         public async Task<IEnumerable<UserDto>> GetUsersDataAsync(string role)
         {
             var users = await _repositoryManager.Users.GetUsersDataAsync(role);
@@ -45,13 +47,20 @@ namespace Server.Service.Services
             return userDto;
             
         }
-        public async Task<Result<UserDto>> AddAsync(UserDto userDto)
+        public async Task<Result<UserDto>> AddAsync(UserDto userDto,string role)
         {
             if (!IsValidEmail(userDto.Email))
                 return Result<UserDto>.BadRequest("Invalid email");
             if (!IsValidPassword(userDto.Password))
                 return Result<UserDto>.BadRequest("Invalid Password");
             var user = _mapper.Map<User>(userDto);
+            int id = 2;
+            if(role=="teacher")
+                id = 3;
+            user.RoleList = new List<Role>();
+            var roleList = await _generyRepository.GetAsync();
+            var existRole = roleList.FirstOrDefault(r => r.Id == id);
+            user.RoleList.Add(existRole);
             if (await _repositoryManager.Users.ExistsAsync(userDto.Email))
                 return Result<UserDto>.Failure("user already exist");
             user.Password = BCrypt.Net.BCrypt.HashPassword(userDto.Password);

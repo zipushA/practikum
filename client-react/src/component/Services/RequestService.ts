@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const RequestService = {
   getPresignedUrl: async (fileName: string, contentType: string) => {
-    const response = await axios.get('https://localhost:7082/api/Teacher/Upload-url', {
+    const response = await axios.get('https://localhost:7082/api/User/Upload-url', {
       params: { fileName, contentType }
     });
     return response.data.url;

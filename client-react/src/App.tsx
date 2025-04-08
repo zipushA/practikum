@@ -1,18 +1,18 @@
 
 import './App.css'
-import MatchingForm from './component/MatchingForm'
-// import FileUpload from './component/FileUpload'
-// import LoginForm from './component/LoginForm'
+//import MatchingForm from './component/MatchingForm'
+ import FileUpload from './component/FileUpload'
+//import LoginForm from './component/LoginForm'
 
 
 function App() {
   return (
     <>
       <div>
-      {/* <FileUpload />
+      <FileUpload />
 
-      <LoginForm /> */}
-      <MatchingForm/>
+      {/* <LoginForm />
+      <MatchingForm/> */}
 
       </div>
      
